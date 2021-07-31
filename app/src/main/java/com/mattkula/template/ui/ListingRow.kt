@@ -48,6 +48,7 @@ fun ListingRow(
     listing: Listing,
 ) {
     val isExpanded = rememberSaveable { mutableStateOf(false) }
+    val navigator = LocalNavigator.current
 
     Column(
         Modifier
@@ -55,7 +56,9 @@ fun ListingRow(
                 interactionSource = remember { MutableInteractionSource() },
                 onLongClick = { isExpanded.value = !isExpanded.value },
                 indication = rememberRipple(color = Color.DarkGray),
-            ) { /* do nothing on click */ }
+            ) {
+                navigator.navigateToDetailScreen(listing.id)
+            }
             .fillMaxWidth()
             .padding(horizontal = 24.dp, vertical = 12.dp)
     ) {

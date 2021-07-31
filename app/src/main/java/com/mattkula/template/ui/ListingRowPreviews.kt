@@ -11,6 +11,7 @@ import com.mattkula.template.data.remote.Sparkline
 
 private object Mocks {
     val LISTING = Listing(
+        id = "bitcoin",
         symbol = "BTC",
         name = "Bitcoin",
         image = "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880",

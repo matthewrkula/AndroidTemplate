@@ -1,6 +1,7 @@
 package com.mattkula.template.data.remote
 
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface GeckoCoinApi {
@@ -13,4 +14,9 @@ interface GeckoCoinApi {
         @Query("sparkline") sparkline: Boolean = true,
         @Query("price_change_percentage") priceChangePct: String = "1h,24h,7d",
     ): List<Listing>
+
+    @GET("coins/{id}")
+    suspend fun getDetail(
+        @Path("id") id: String = "bitcoin",
+    ): CryptoDetail
 }
