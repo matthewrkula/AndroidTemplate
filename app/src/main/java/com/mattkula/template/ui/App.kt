@@ -22,6 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.mattkula.template.R
 import com.mattkula.template.ui.core.controller
 import com.mattkula.template.ui.home.HomeController
@@ -56,25 +58,21 @@ fun Home() {
 fun HomeContent(
     state: HomeController.State,
 ) {
-    if (state.listings.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            CircularProgressIndicator(Modifier.align(Alignment.Center))
-        }
-    } else {
-        ListingList(state)
-    }
-}
+    val controller = controller<HomeController>()
 
-@Composable
-fun ListingList(state: HomeController.State) {
-    LazyColumn(Modifier.fillMaxSize()) {
-        itemsIndexed(state.listings) { index, listing ->
-            ListingRow(listing = listing)
-            if (index != state.listings.indices.last) {
-                Divider(
-                    color = Color.LightGray,
-                    modifier = Modifier.padding(horizontal = 24.dp)
-                )
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(state.isRefreshing),
+        onRefresh = { controller.refreshData() }
+    ) {
+        LazyColumn(Modifier.fillMaxSize()) {
+            itemsIndexed(state.listings) { index, listing ->
+                ListingRow(listing = listing)
+                if (index != state.listings.indices.last) {
+                    Divider(
+                        color = Color.LightGray,
+                        modifier = Modifier.padding(horizontal = 24.dp)
+                    )
+                }
             }
         }
     }

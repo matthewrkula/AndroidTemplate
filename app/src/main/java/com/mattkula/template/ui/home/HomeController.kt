@@ -12,16 +12,27 @@ class HomeController(
 ) : Controller<HomeController.State>() {
 
     data class State(
-        val listings: List<Listing> = emptyList()
+        val listings: List<Listing> = emptyList(),
+        val isRefreshing: Boolean = true,
     ) : ControllerState
 
     override val initialState by lazy { State() }
 
     init {
+        refreshData()
+    }
+
+    fun refreshData() {
         controllerScope.launch {
+            updateState { copy(isRefreshing = true) }
+
             val response = api.getListing()
+
             updateState {
-                copy(listings = response)
+                copy(
+                    listings = response,
+                    isRefreshing = false
+                )
             }
         }
     }

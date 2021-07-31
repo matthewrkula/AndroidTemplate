@@ -97,6 +97,7 @@ dependencies {
 
     implementation Libs.Accompanist.pager
     implementation Libs.Accompanist.insets
+    implementation Libs.Accompanist.swipeToRefresh
 
     implementation Libs.Coil.coilCompose
 
