@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,6 +31,7 @@ import com.mattkula.template.ui.LineChart
 import com.mattkula.template.ui.SampleModels
 import com.mattkula.template.ui.core.controller
 import com.mattkula.template.ui.currencyFormat
+import com.mattkula.template.ui.utils.chartColor
 
 class DetailControllerFactory(
     private val cryptoId: String
@@ -62,6 +64,7 @@ fun DetailContent(controller: DetailController) {
         Column(
             Modifier
                 .fillMaxSize()
+                .background(MaterialTheme.colors.background)
         ) {
             state.value.crypto?.let {
                 CryptoDetailsDisplay(crypto = it)
@@ -77,6 +80,7 @@ fun CryptoDetailsDisplay(crypto: CryptoDetail) {
             text = crypto.name,
             fontSize = 48.sp,
             fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colors.onBackground,
             modifier = Modifier
                 .padding(top = 20.dp, start = 20.dp)
                 .align(Alignment.Start)
@@ -85,15 +89,13 @@ fun CryptoDetailsDisplay(crypto: CryptoDetail) {
             text = currencyFormat.format(crypto.marketData.currentPrice.usd),
             fontSize = 40.sp,
             fontWeight = FontWeight.Thin,
-            modifier = Modifier.padding(start = 20.dp)
+            color = MaterialTheme.colors.onBackground,
+            modifier = Modifier.padding(start = 20.dp),
         )
         val prices = crypto.marketData.sparkline7d?.price?.takeLast(24) ?: emptyList()
         LineChart(
             points = prices,
-            strokeColor = when {
-                prices.first() > prices.last() -> Color.Red
-                else -> Color.Green
-            },
+            strokeColor = prices.chartColor(),
             modifier = Modifier.fillMaxWidth()
                 .height(140.dp)
                 .padding(top = 12.dp)

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
@@ -32,6 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.mattkula.template.data.remote.Listing
+import com.mattkula.template.ui.theme.MutedRed
+import com.mattkula.template.ui.theme.NeonGreen
+import com.mattkula.template.ui.utils.chartColor
 import java.text.NumberFormat
 import java.util.*
 
@@ -91,12 +95,13 @@ fun ListingRowContent(
                 text = listing.symbol.toUpperCase(Locale.current),
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
+                color = MaterialTheme.colors.onBackground
             )
             Text(
                 text = listing.name,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Light,
-                color = Color.Gray
+                color = Color.LightGray
             )
         }
         Column(
@@ -117,8 +122,8 @@ fun ListingRowContent(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Light,
                 color = when {
-                    listing.percentChange24h >= 0 -> Color.Green
-                    else -> Color.Red
+                    listing.percentChange24h >= 0 -> Color.NeonGreen
+                    else -> Color.MutedRed
                 },
                 modifier = Modifier.align(Alignment.End)
             )
@@ -148,10 +153,7 @@ fun ListingRowExtras(
         if (prices.isNotEmpty()) {
             LineChart(
                 points = prices,
-                strokeColor = when {
-                    prices.first() > prices.last() -> Color.Red
-                    else -> Color.Green
-                },
+                strokeColor = prices.chartColor(),
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth()

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
@@ -30,7 +31,7 @@ fun HomeScreen(
     val controller = controller<HomeController>()
 
     Column(
-        modifier = Modifier.background(Color.White)
+        modifier = Modifier.background(MaterialTheme.colors.background)
     ) {
         HomeContent(
             controller = controller,
@@ -60,7 +61,7 @@ fun HomeContent(
                     navigateToDetail = navigateToDetail
                 )
                 if (index != state.value.listings.indices.last) {
-                    Divider(color = Color.LightGray)
+                    Divider(color = Color.White, thickness = 0.5.dp)
                 }
             }
         }
