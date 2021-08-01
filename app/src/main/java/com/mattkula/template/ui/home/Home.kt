@@ -23,7 +23,9 @@ import com.mattkula.template.ui.ListingRow
 import com.mattkula.template.ui.core.controller
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    navigateToDetail: (String) -> Unit,
+) {
     val controller = controller<HomeController>()
 
     Column(
@@ -37,12 +39,18 @@ fun HomeScreen() {
                 )
             },
         )
-        HomeContent(controller)
+        HomeContent(
+            controller = controller,
+            navigateToDetail = navigateToDetail
+        )
     }
 }
 
 @Composable
-fun HomeContent(controller: HomeController) {
+fun HomeContent(
+    controller: HomeController,
+    navigateToDetail: (String) -> Unit,
+) {
     val state = controller.stateFlow.collectAsState()
 
     SwipeRefresh(
@@ -51,7 +59,10 @@ fun HomeContent(controller: HomeController) {
     ) {
         LazyColumn(Modifier.fillMaxSize()) {
             itemsIndexed(state.value.listings) { index, listing ->
-                ListingRow(listing = listing)
+                ListingRow(
+                    listing = listing,
+                    navigateToDetail = navigateToDetail
+                )
                 if (index != state.value.listings.indices.last) {
                     Divider(
                         color = Color.LightGray,

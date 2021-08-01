@@ -46,9 +46,9 @@ val currencyFormat = NumberFormat.getCurrencyInstance().apply {
 @Composable
 fun ListingRow(
     listing: Listing,
+    navigateToDetail: (String) -> Unit = {},
 ) {
     val isExpanded = rememberSaveable { mutableStateOf(false) }
-    val navigator = LocalNavigator.current
 
     Column(
         Modifier
@@ -57,7 +57,7 @@ fun ListingRow(
                 onLongClick = { isExpanded.value = !isExpanded.value },
                 indication = rememberRipple(color = Color.DarkGray),
             ) {
-                navigator.navigateToDetailScreen(listing.id)
+                navigateToDetail(listing.id)
             }
             .fillMaxWidth()
             .padding(horizontal = 24.dp, vertical = 12.dp)
