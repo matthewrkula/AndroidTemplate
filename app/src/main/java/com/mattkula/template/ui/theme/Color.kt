@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
 val Yellow800 = Color(0xFFF29F05)
 val Red300 = Color(0xFFEA6D7E)
 
-val Color.Companion.MutedRed get() = Color(0xFFB1434E)
+val Color.Companion.MutedRed get() = Color(0xFFB13541)
 val Color.Companion.NeonGreen get() = Color(0xFFC4C92C)
 val Color.Companion.NeonPink get() = Color(0xFFFF3C38)
 

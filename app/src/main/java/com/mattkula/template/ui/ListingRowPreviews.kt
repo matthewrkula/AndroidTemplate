@@ -36,6 +36,8 @@ object SampleModels {
                 usd = 1234.56f
             ),
             sparkline7d = Sparkline(price = listOf(1f, 2f, -10f, 12f)),
+            priceChange24h = 123.4f,
+            percentChange24h = 23.2f,
         ),
     )
 }

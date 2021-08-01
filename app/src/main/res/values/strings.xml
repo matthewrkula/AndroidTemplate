@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Template App</string>
+    <string name="prefix_up_arrow">\u25b2 %1$s</string>
+    <string name="prefix_down_arrow">\u25bc %1$s</string>
 </resources>

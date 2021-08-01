@@ -26,6 +26,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
@@ -36,11 +38,15 @@ import com.mattkula.template.data.remote.Listing
 import com.mattkula.template.ui.theme.MutedRed
 import com.mattkula.template.ui.theme.NeonGreen
 import com.mattkula.template.ui.utils.chartColor
+import com.mattkula.template.ui.widgets.TickerChangeText
 import java.text.NumberFormat
 import java.util.*
 
 val currencyFormat = NumberFormat.getCurrencyInstance().apply {
     currency = Currency.getInstance("USD")
+}
+val percentFormat = NumberFormat.getPercentInstance().apply {
+    minimumFractionDigits = 2
 }
 
 @OptIn(
@@ -52,13 +58,18 @@ fun ListingRow(
     listing: Listing,
     navigateToDetail: (String) -> Unit = {},
 ) {
+    val feedback = LocalHapticFeedback.current
+
     val isExpanded = rememberSaveable { mutableStateOf(false) }
 
     Column(
         Modifier
             .combinedClickable(
                 interactionSource = remember { MutableInteractionSource() },
-                onLongClick = { isExpanded.value = !isExpanded.value },
+                onLongClick = {
+                    feedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                    isExpanded.value = !isExpanded.value
+                },
                 indication = rememberRipple(color = Color.DarkGray),
             ) {
                 navigateToDetail(listing.id)
@@ -112,19 +123,15 @@ fun ListingRowContent(
         ) {
             Text(
                 text = currencyFormat.format(listing.currentPrice),
-                fontSize = 16.sp,
+                fontSize = 18.sp,
+                modifier = Modifier.align(Alignment.End)
             )
-            Text(
-                text = when {
-                    showPercentage ->"%.2f".format(listing.percentChange24h) + "%"
-                    else -> currencyFormat.format(listing.priceChange24h)
-                },
-                fontSize = 14.sp,
+            TickerChangeText(
+                percentChange = listing.percentChange24h,
+                currencyChange = listing.priceChange24h,
+                showPercentage = showPercentage,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.Light,
-                color = when {
-                    listing.percentChange24h >= 0 -> Color.NeonGreen
-                    else -> Color.MutedRed
-                },
                 modifier = Modifier.align(Alignment.End)
             )
         }

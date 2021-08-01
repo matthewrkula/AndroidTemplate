@@ -34,6 +34,8 @@ data class CryptoDetail(
     @JsonClass(generateAdapter = true)
     data class MarketData(
         @Json(name = "current_price") val currentPrice: ByCurrency,
+        @Json(name = "price_change_24h") val priceChange24h: Float,
+        @Json(name = "price_change_percentage_24h") val percentChange24h: Float,
         @Json(name = "sparkline_7d") val sparkline7d: Sparkline? = null,
     ) {
         @JsonClass(generateAdapter = true)
