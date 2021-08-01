@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.mattkula.template.ui.detail.DetailScreen
+import com.mattkula.template.ui.portfolio.PortfolioScreen
 import com.mattkula.template.ui.home.HomeScreen
 
 internal sealed class PrimaryNav(val route: String) {
@@ -63,6 +64,6 @@ private fun NavGraphBuilder.addPortfolioTopLevel(
         route = PrimaryNav.Portfolio.route,
         startDestination = Screen.Portfolio.route
     ) {
-        composable(Screen.Portfolio.route) { DetailScreen("bitcoin") }
+        composable(Screen.Portfolio.route) { PortfolioScreen() }
     }
 }

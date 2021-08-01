@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -36,6 +34,11 @@ fun App() {
     val navController = rememberNavController()
 
     Scaffold(
+        content = {
+            Box(Modifier.fillMaxSize()) {
+                AppNavigation(navController = navController)
+            }
+        },
         bottomBar = {
             val currentSelectedItem by navController.currentNavAsState()
 
@@ -54,11 +57,7 @@ fun App() {
                 modifier = Modifier.fillMaxWidth()
             )
         }
-    ) {
-        Box(Modifier.fillMaxSize()) {
-            AppNavigation(navController = navController)
-        }
-    }
+    )
 }
 
 @Composable
@@ -73,10 +72,7 @@ private fun NavController.currentNavAsState(): State<PrimaryNav> {
             }
         }
         addOnDestinationChangedListener(listener)
-
-        onDispose {
-            removeOnDestinationChangedListener(listener)
-        }
+        onDispose { removeOnDestinationChangedListener(listener) }
     }
 
     return selectedItem
