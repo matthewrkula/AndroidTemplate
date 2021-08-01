@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -40,12 +41,18 @@ fun LineChart(
     modifier: Modifier = Modifier,
     strokeColor: Color = Color.Blue,
 ) {
-    val path = remember { Path() }
+    var canvasWidth by rememberSaveable { mutableStateOf(0.0f) }
+    var canvasHeight by rememberSaveable { mutableStateOf(0.0f) }
+
+    val (path, lineY) = rememberScaledPath(points, canvasWidth, canvasHeight)
+
     val outputPath = remember { Path() }
     val pathMeasure = remember { PathMeasure() }
 
     var animationFinished by rememberSaveable { mutableStateOf(false) }
     val percentDrawn = remember { Animatable(if (animationFinished) 1.0f else 0.0f) }
+
+    val pathToDraw = pathMeasure.rememberPathToDraw(path, outputPath, percentDrawn.value)
 
     LaunchedEffect(Unit) {
         val state = percentDrawn.animateTo(
@@ -55,54 +62,71 @@ fun LineChart(
         animationFinished = state.endReason == AnimationEndReason.Finished
     }
 
-    Canvas(modifier = modifier.fillMaxSize()) {
-        val canvasWidth = size.width
-        val canvasHeight = size.height
+    Canvas(
+        modifier = modifier.fillMaxSize()
+    ) {
+        canvasWidth = size.width
+        canvasHeight = size.height
 
-        if (points.isNotEmpty()) {
-            val min = points.minOrNull() ?: Float.MIN_VALUE
-            val max = points.maxOrNull() ?: Float.MAX_VALUE
+        drawLine(
+            color = Color.LightGray,
+            start = Offset(x = 0f, y = lineY),
+            end = Offset(x = canvasWidth, y = lineY),
+            pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f)),
+        )
 
-            val adjustedPoints = points.map { (it - min) / (max - min) }
-            val widthDiff = canvasWidth / (adjustedPoints.size - 1)
+        drawPath(
+            path = pathToDraw,
+            color = strokeColor,
+            style = Stroke(
+                width = 6.dp.value,
+                cap = StrokeCap.Round,
+            ),
+        )
+    }
+}
 
-            path.reset()
-            adjustedPoints.forEachIndexed { index, number ->
-                val x = widthDiff * index
-                val y = canvasHeight - (number * canvasHeight)
+@Composable
+private fun rememberScaledPath(
+    points: List<Float>,
+    width: Float,
+    height: Float
+) = remember(points, width, height) {
+    val path = Path()
+    val min = points.minOrNull() ?: Float.MIN_VALUE
+    val max = points.maxOrNull() ?: Float.MAX_VALUE
 
-                when (index) {
-                    0 -> path.moveTo(x, y)
-                    else -> path.lineTo(x, y)
-                }
-            }
+    val adjustedPoints = points.map { (it - min) / (max - min) }
 
-            pathMeasure.apply {
-                setPath(path, false)
-                getSegment(
-                    startDistance = 0f,
-                    stopDistance = pathMeasure.length * percentDrawn.value,
-                    destination = outputPath,
-                    startWithMoveTo = true
-                )
-            }
+    val widthDiff = width / (adjustedPoints.size - 1)
 
-            val lineY = canvasHeight - (adjustedPoints.first() * canvasHeight)
-            drawLine(
-                color = Color.LightGray,
-                start = Offset(x = 0f, y = lineY),
-                end = Offset(x = canvasWidth, y = lineY),
-                pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f))
-            )
+    adjustedPoints.forEachIndexed { index, number ->
+        val x = widthDiff * index
+        val y = height - (number * height)
 
-            drawPath(
-                path = outputPath,
-                color = strokeColor,
-                style = Stroke(
-                    width = 6.dp.value,
-                    cap = StrokeCap.Round,
-                ),
-            )
+        when (index) {
+            0 -> path.moveTo(x, y)
+            else -> path.lineTo(x, y)
         }
     }
+
+    val lineY = height - (adjustedPoints.first() * height)
+
+    path to lineY
+}
+
+@Composable
+private fun PathMeasure.rememberPathToDraw(
+    inputPath: Path,
+    outputPath: Path,
+    drawPercent: Float
+) = remember(inputPath, drawPercent) {
+    setPath(inputPath, false)
+    getSegment(
+        startDistance = 0f,
+        stopDistance = this.length * drawPercent,
+        destination = outputPath,
+        startWithMoveTo = true
+    )
+     outputPath
 }

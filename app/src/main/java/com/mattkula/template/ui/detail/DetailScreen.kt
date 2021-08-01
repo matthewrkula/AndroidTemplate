@@ -61,7 +61,6 @@ fun DetailContent(controller: DetailController) {
     ) {
         Column(
             Modifier
-                .scrollable(rememberScrollState(), Orientation.Vertical)
                 .fillMaxSize()
         ) {
             state.value.crypto?.let {
@@ -103,7 +102,7 @@ fun CryptoDetailsDisplay(crypto: CryptoDetail) {
 }
 
 @Composable
-@Preview
+@Preview(backgroundColor = 0xffffff, showBackground = true)
 fun CryptoDetailsDisplayPreview() {
     CryptoDetailsDisplay(crypto = SampleModels.CRYPTO_DETAIL)
 }
