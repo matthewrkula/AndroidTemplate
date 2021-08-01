@@ -60,7 +60,7 @@ fun ListingRow(
                 navigateToDetail(listing.id)
             }
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 12.dp)
+            .padding(horizontal = 12.dp, vertical = 12.dp)
     ) {
         ListingRowContent(listing = listing)
         AnimatedVisibility(visible = isExpanded.value) {

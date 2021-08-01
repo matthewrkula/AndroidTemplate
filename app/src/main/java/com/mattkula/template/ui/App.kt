@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -34,8 +35,12 @@ fun App() {
     val navController = rememberNavController()
 
     Scaffold(
-        content = {
-            Box(Modifier.fillMaxSize()) {
+        content = { paddingValues ->
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
                 AppNavigation(navController = navController)
             }
         },

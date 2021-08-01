@@ -2,6 +2,7 @@ package com.mattkula.template.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,14 +32,6 @@ fun HomeScreen(
     Column(
         modifier = Modifier.background(Color.White)
     ) {
-        TopAppBar(
-            title = {
-                Text(
-                    text = stringResource(id = R.string.app_name),
-                    fontWeight = FontWeight.Bold,
-                )
-            },
-        )
         HomeContent(
             controller = controller,
             navigateToDetail = navigateToDetail
@@ -57,17 +50,17 @@ fun HomeContent(
         state = rememberSwipeRefreshState(state.value.isRefreshing),
         onRefresh = { controller.refreshData() }
     ) {
-        LazyColumn(Modifier.fillMaxSize()) {
+        LazyColumn(
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
+            modifier = Modifier.fillMaxSize()
+        ) {
             itemsIndexed(state.value.listings) { index, listing ->
                 ListingRow(
                     listing = listing,
                     navigateToDetail = navigateToDetail
                 )
                 if (index != state.value.listings.indices.last) {
-                    Divider(
-                        color = Color.LightGray,
-                        modifier = Modifier.padding(horizontal = 24.dp)
-                    )
+                    Divider(color = Color.LightGray)
                 }
             }
         }
