@@ -6,10 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mattkula.template.data.remote.CryptoDetail
 import com.mattkula.template.data.remote.Listing
 import com.mattkula.template.data.remote.Sparkline
 
-private object Mocks {
+object SampleModels {
     val LISTING = Listing(
         id = "bitcoin",
         symbol = "BTC",
@@ -25,13 +26,25 @@ private object Mocks {
             price = listOf(1f, 2f, -10f, 12f)
         )
     )
+
+    val CRYPTO_DETAIL = CryptoDetail(
+        id = "bitcoin",
+        name = "Bitcoin",
+        symbol = "BTC",
+        marketData = CryptoDetail.MarketData(
+            currentPrice = CryptoDetail.MarketData.ByCurrency(
+                usd = 1234.56f
+            ),
+            sparkline7d = Sparkline(price = listOf(1f, 2f, -10f, 12f)),
+        ),
+    )
 }
 
 @Composable
 @Preview(backgroundColor = 0xffffff, showBackground = true)
 private fun ListingRowPreview() {
     Column(Modifier.padding(horizontal = 24.dp, vertical = 12.dp)) {
-        ListingRowContent(listing = Mocks.LISTING)
-        ListingRowExtras(listing = Mocks.LISTING)
+        ListingRowContent(listing = SampleModels.LISTING)
+        ListingRowExtras(listing = SampleModels.LISTING)
     }
 }

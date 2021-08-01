@@ -35,7 +35,7 @@ import com.mattkula.template.data.remote.Listing
 import java.text.NumberFormat
 import java.util.*
 
-private val currencyFormat = NumberFormat.getCurrencyInstance().apply {
+val currencyFormat = NumberFormat.getCurrencyInstance().apply {
     currency = Currency.getInstance("USD")
 }
 
@@ -95,6 +95,7 @@ fun ListingRowContent(
             Text(
                 text = listing.name,
                 fontSize = 14.sp,
+                fontWeight = FontWeight.Light,
                 color = Color.Gray
             )
         }
@@ -114,6 +115,7 @@ fun ListingRowContent(
                     else -> currencyFormat.format(listing.priceChange24h)
                 },
                 fontSize = 14.sp,
+                fontWeight = FontWeight.Light,
                 color = when {
                     listing.percentChange24h >= 0 -> Color.Green
                     else -> Color.Red

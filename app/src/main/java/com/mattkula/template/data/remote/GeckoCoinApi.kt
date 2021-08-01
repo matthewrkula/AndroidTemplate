@@ -18,5 +18,6 @@ interface GeckoCoinApi {
     @GET("coins/{id}")
     suspend fun getDetail(
         @Path("id") id: String = "bitcoin",
+        @Query("sparkline") sparkline: Boolean = true,
     ): CryptoDetail
 }

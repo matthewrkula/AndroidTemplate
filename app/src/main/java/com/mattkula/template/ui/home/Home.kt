@@ -23,7 +23,9 @@ import com.mattkula.template.ui.ListingRow
 import com.mattkula.template.ui.core.controller
 
 @Composable
-fun Home() {
+fun HomeScreen() {
+    val controller = controller<HomeController>()
+
     Column(
         modifier = Modifier.background(Color.White)
     ) {
@@ -35,13 +37,12 @@ fun Home() {
                 )
             },
         )
-        HomeContent()
+        HomeContent(controller)
     }
 }
 
 @Composable
-fun HomeContent() {
-    val controller = controller<HomeController>()
+fun HomeContent(controller: HomeController) {
     val state = controller.stateFlow.collectAsState()
 
     SwipeRefresh(

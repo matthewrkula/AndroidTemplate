@@ -6,8 +6,8 @@ import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mattkula.template.ui.detail.Details
-import com.mattkula.template.ui.home.Home
+import com.mattkula.template.ui.detail.DetailScreen
+import com.mattkula.template.ui.home.HomeScreen
 
 @Composable
 fun App() {
@@ -18,9 +18,9 @@ fun App() {
         LocalNavigator provides navigator,
     ) {
         NavHost(navController = navController, startDestination = "home") {
-            composable("home") { Home() }
+            composable("home") { HomeScreen() }
             composable("details/{cryptoId}") {
-                Details(it.arguments?.getString("cryptoId").orEmpty())
+                DetailScreen(it.arguments?.getString("cryptoId").orEmpty())
             }
         }
     }

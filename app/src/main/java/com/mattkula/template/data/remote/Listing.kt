@@ -28,5 +28,15 @@ data class CryptoDetail(
     val id: String,
     val name: String,
     val symbol: String,
-//    @Json(name = "current_price") val currentPrice: Float,
-)
+    @Json(name = "market_data") val marketData: MarketData,
+) {
+
+    @JsonClass(generateAdapter = true)
+    data class MarketData(
+        @Json(name = "current_price") val currentPrice: ByCurrency,
+        @Json(name = "sparkline_7d") val sparkline7d: Sparkline? = null,
+    ) {
+        @JsonClass(generateAdapter = true)
+        data class ByCurrency(val usd: Float)
+    }
+}
